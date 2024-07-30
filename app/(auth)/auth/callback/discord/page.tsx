@@ -12,18 +12,15 @@ export default function Page() {
     const searchParams = useSearchParams();
 
     let state = searchParams.get("state");
-    if (!state) {
-        return <div>Invalid state</div>;
-    }
-
     let code = searchParams.get("code");
-    if (!code) {
-        return <div>Invalid code</div>;
-    }
 
     const [user, setUser] = React.useState<User | null>(null);
 
     React.useEffect(() => {
+        if (!state || !code) {
+            return;
+        }
+
         fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/verify/discord`, {
             method: "POST",
             headers: {
@@ -41,6 +38,14 @@ export default function Page() {
             }
         });
     }, [setUser, state, code]);
+
+    if (!state) {
+        return <div>Invalid state</div>;
+    }
+    
+    if (!code) {
+        return <div>Invalid code</div>;
+    }
 
     return (
         <div className="h-screen">
