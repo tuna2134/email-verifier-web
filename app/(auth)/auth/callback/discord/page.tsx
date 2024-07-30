@@ -1,22 +1,22 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface User {
     username: string;
 }
 
-export default function Page() {
+function Content() {
     const searchParams = useSearchParams();
 
     let state = searchParams.get("state");
     let code = searchParams.get("code");
 
-    const [user, setUser] = React.useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!state || !code) {
             return;
         }
@@ -61,5 +61,13 @@ export default function Page() {
                 </Card>
             </div>
         </div>
+    )
+}
+
+export default function Page() {
+    return (
+        <Suspense>
+            <Content />
+        </Suspense>
     )
 }
