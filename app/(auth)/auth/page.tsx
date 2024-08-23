@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import Link from "next/link";
 
@@ -20,19 +20,25 @@ export default function Page({
     }
     return (
         <div className="h-screen">
-            <div className="flex w-full h-full items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center">
                 <Card>
                     <CardHeader>
                         <CardTitle>ログイン</CardTitle>
-                        <CardDescription>ログインすることでメールアドレスをチェックします。</CardDescription>
+                        <CardDescription>
+                            ログインすることでメールアドレスをチェックします。
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Button asChild>
-                            <Link href={`${process.env.NEXT_PUBLIC_DISCORD_OAUTH_URL}&state=${code}`}>Login with Discord</Link>
+                            <Link
+                                href={`${process.env.NEXT_PUBLIC_DISCORD_OAUTH_URL}&state=${code}`}
+                            >
+                                Login with Discord
+                            </Link>
                         </Button>
                     </CardContent>
                 </Card>
             </div>
         </div>
-    )
+    );
 }

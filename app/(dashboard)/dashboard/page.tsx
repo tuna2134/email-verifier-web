@@ -1,3 +1,3 @@
 export default function Page() {
-    return <p>kitkat</p>
+    return <p>kitkat</p>;
 }
