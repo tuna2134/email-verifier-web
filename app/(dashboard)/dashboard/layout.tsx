@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, House } from "lucide-react";
 import Link from "next/link";
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   }>) {
     return (
         <ResizablePanelGroup direction="horizontal" className="min-h-screen">
-            <ResizablePanel defaultSize={20} maxSize={25} className="bg-slate-200/20">
+            <ResizablePanel defaultSize={20} maxSize={25}>
                 <div className="p-8 h-16 flex items-center border-b">
                     <div className="flex justify-start items-center">
                         <Avatar>
@@ -31,12 +31,15 @@ export default function RootLayout({
                 </div>
                 <div>
                     <Button asChild variant="link">
-                        <Link href="/" className="w-auto h-20 m-2">Hello</Link>
+                        <Link href="/" className="w-auto h-20 m-2 font-bold">
+                            <House className="mr-4" />
+                            Home
+                        </Link>
                     </Button>
                 </div>
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={80}>{children}</ResizablePanel>
+            <ResizablePanel defaultSize={80} className="bg-slate-400/10">{children}</ResizablePanel>
         </ResizablePanelGroup>
     );
   }
