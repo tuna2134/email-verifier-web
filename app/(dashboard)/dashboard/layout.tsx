@@ -37,9 +37,12 @@ export default function RootLayout({
                         </PopoverContent>
                     </Popover>
                 </div>
-                <div>
-                    <Button asChild variant="link">
-                        <Link href="/" className="m-2 h-20 w-auto font-bold">
+                <div className="flex flex-col">
+                    <Button asChild variant="ghost" size="lg">
+                        <Link
+                            href="/dashboard"
+                            className="m-2 justify-start font-bold"
+                        >
                             <House className="mr-4" />
                             Home
                         </Link>
@@ -48,7 +51,7 @@ export default function RootLayout({
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={80} className="bg-slate-400/10">
-                {children}
+                <main className="mx-auto mt-8 max-w-4xl px-8">{children}</main>
             </ResizablePanel>
         </ResizablePanelGroup>
     );
