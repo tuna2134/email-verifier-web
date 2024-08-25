@@ -1,87 +1,41 @@
 "use client";
-
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import {
-    Select,
-    SelectContent,
-    SelectTrigger,
-    SelectValue,
-    SelectItem,
-} from "@/components/ui/select";
-
-const formSchema = z.object({
-    email_pattern: z.string(),
-    role: z.string(),
-});
+import { DashboardLayout } from "@/components/pages/dashboard";
+import { useUserGuilds } from "@/lib/user";
+import { getCookie } from "cookies-next";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 export default function Page() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-    });
-
-    async function onSubmit(data: z.infer<typeof formSchema>) {
-        console.log(data);
+    let token = getCookie("token");
+    if (!token) {
+        window.location.href = process.env
+            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
     }
+
+    const { data, error, isLoading } = useUserGuilds(token as string);
+    if (isLoading) return <div>loading...</div>;
+    if (error) {
+        window.location.href = process.env
+            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
+    }
+    let guilds = data?.filter((guild) => guild.owner);
+    console.log(guilds)
+
     return (
-        <>
-            <h1 className="text-2xl font-bold">基本的な設定</h1>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="mt-8 space-y-8"
-                >
-                    <FormField
-                        control={form.control}
-                        name="email_pattern"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>メールアドレスのパターン</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="正規表現で書いてください"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="role"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>
-                                    認証成功した際に渡すロール
-                                </FormLabel>
-                                <Select onValueChange={field.onChange}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="ロール"></SelectValue>
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="test">
-                                            test
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit">保存</Button>
-                </form>
-            </Form>
-        </>
+        <DashboardLayout navs={[]}>
+            <h1 className="text-2xl font-semibold mb-8">Dashboard</h1>
+            <div className="grid grid-cols-4 gap-6">
+                {guilds?.map((guild, index) => (
+                    <Link href={`/dashboard/${guild.id}`}>
+                        <Avatar key={index} className="h-full w-full">
+                            <AvatarImage
+                                src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`}
+                            />
+                            <AvatarFallback>{guild.name}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                ))}
+            </div>
+        </DashboardLayout>
     );
 }
