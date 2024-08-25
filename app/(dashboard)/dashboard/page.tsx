@@ -3,20 +3,24 @@ import { DashboardLayout } from "@/components/pages/dashboard";
 import { useUserGuilds } from "@/lib/user";
 import { getCookie } from "cookies-next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Page() {
     let token = getCookie("token");
+    const router = useRouter();
     if (!token) {
-        window.location.href = process.env
-            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
+        router.push(
+            process.env.NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string,
+        );
     }
 
     const { data, error, isLoading } = useUserGuilds(token as string);
     if (isLoading) return <div>loading...</div>;
     if (error) {
-        window.location.href = process.env
-            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
+        router.push(
+            process.env.NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string,
+        );
     }
     let guilds = data?.filter((guild) => guild.owner);
     console.log(guilds);
