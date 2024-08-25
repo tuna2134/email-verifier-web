@@ -34,8 +34,9 @@ export default function Page() {
     async function onSubmit(data: z.infer<typeof formSchema>) {
         console.log(data);
     }
+
     return (
-        <DashboardLayout navs={[]}>
+        <>
             <h1 className="text-2xl font-bold">基本的な設定</h1>
             <Form {...form}>
                 <form
@@ -83,6 +84,6 @@ export default function Page() {
                     <Button type="submit">保存</Button>
                 </form>
             </Form>
-        </DashboardLayout>
+        </>
     );
 }

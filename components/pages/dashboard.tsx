@@ -84,6 +84,7 @@ export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
                             Home
                         </Link>
                     </Button>
+                    <div className="border-b" />
                     {navs.map((nav, index) => (
                         <Button asChild variant="ghost" size="lg">
                             <Link

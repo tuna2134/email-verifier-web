@@ -19,11 +19,11 @@ export default function Page() {
             .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
     }
     let guilds = data?.filter((guild) => guild.owner);
-    console.log(guilds)
+    console.log(guilds);
 
     return (
         <DashboardLayout navs={[]}>
-            <h1 className="text-2xl font-semibold mb-8">Dashboard</h1>
+            <h1 className="mb-8 text-2xl font-semibold">Dashboard</h1>
             <div className="grid grid-cols-4 gap-6">
                 {guilds?.map((guild, index) => (
                     <Link href={`/dashboard/${guild.id}`}>
