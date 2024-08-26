@@ -16,6 +16,8 @@ import Link from "next/link";
 import { getCookie, deleteCookie } from "cookies-next";
 import { useUser } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface Nav {
     name: string;
@@ -28,6 +30,40 @@ interface DashboardLayoutProps {
     navs: Nav[];
 }
 
+function User({ token }: { token: string }) {
+    let router = useRouter();
+    let { data } = useUser(token);
+
+    function logout() {
+        deleteCookie("token");
+        router.push("/");
+    }
+
+    return (
+        <div className="flex h-16 items-center border-b p-8">
+            <div className="flex items-center justify-start">
+                <Avatar>
+                    <AvatarFallback>{data?.username}</AvatarFallback>
+                    <AvatarImage
+                        src={`https://cdn.discordapp.com/avatars/${data?.id}/${data?.avatar}.png`}
+                        alt={data?.username}
+                    />
+                </Avatar>
+            </div>
+            <Popover>
+                <PopoverTrigger className="ml-auto">
+                    <ChevronDown />
+                </PopoverTrigger>
+                <PopoverContent>
+                    <Button onClick={logout} variant="destructive">
+                        Logout
+                    </Button>
+                </PopoverContent>
+            </Popover>
+        </div>
+    );
+}
+
 export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
     let router = useRouter();
     let token = getCookie("token");
@@ -38,47 +74,12 @@ export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
         );
     }
 
-    let { data, error, isLoading } = useUser(token as string);
-
-    if (error) {
-        router.push(
-            process.env.NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string,
-        );
-        return <div>failed to load</div>;
-    }
-    if (isLoading) return <div>loading...</div>;
-
-    console.log(data);
-
-    function logout() {
-        deleteCookie("token");
-        window.location.href = "/";
-    }
-
     return (
         <ResizablePanelGroup direction="horizontal" className="min-h-screen">
             <ResizablePanel defaultSize={25} maxSize={25}>
-                <div className="flex h-16 items-center border-b p-8">
-                    <div className="flex items-center justify-start">
-                        <Avatar>
-                            <AvatarFallback>{data?.username}</AvatarFallback>
-                            <AvatarImage
-                                src={`https://cdn.discordapp.com/avatars/${data?.id}/${data?.avatar}.png`}
-                                alt={data?.username}
-                            />
-                        </Avatar>
-                    </div>
-                    <Popover>
-                        <PopoverTrigger className="ml-auto">
-                            <ChevronDown />
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <Button onClick={logout} variant="destructive">
-                                Logout
-                            </Button>
-                        </PopoverContent>
-                    </Popover>
-                </div>
+                <Suspense fallback={<Skeleton className="h-16" />}>
+                    <User token={token as string} />
+                </Suspense>
                 <div className="flex flex-col">
                     <Button asChild variant="ghost" size="lg">
                         <Link
