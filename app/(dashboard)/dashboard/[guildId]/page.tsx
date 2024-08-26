@@ -22,6 +22,7 @@ import {
 import { useGuildChannels, useGuildRoles } from "@/lib/api";
 import { getCookie } from "cookies-next";
 import { Suspense } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
     email_pattern: z.string(),
@@ -70,13 +71,13 @@ function SelectChannelContent({
 
 export default function Page({ params }: { params: { guildId: string } }) {
     let token = getCookie("token") as string;
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
-        console.log(data);
         await fetch(
             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${params.guildId}/general_settings`,
             {
@@ -92,6 +93,10 @@ export default function Page({ params }: { params: { guildId: string } }) {
                 }),
             },
         );
+        toast({
+            title: "Success",
+            description: "設定を保存しました",
+        });
     }
 
     return (

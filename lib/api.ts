@@ -30,6 +30,12 @@ async function fetchWithToken<T>(url: string, token: string): Promise<T> {
             Authorization: `Bearer ${token}`,
         },
     });
+    if (!response.ok) {
+        let error = new Error(response.status.toString());
+        error.info = await response.json();
+        error.status = response.status;
+        throw error;
+    }
     const user: T = await response.json();
     return user;
 }
@@ -74,6 +80,21 @@ export function useGuildChannels(token: string, guildId: string) {
             token as string,
         ],
         ([url, token]) => fetchWithToken<Channel[]>(url, token),
+    );
+    return result;
+}
+
+export interface Getguild {
+    Ok: Guild;
+}
+
+export function useGuild(token: string, guildId: string) {
+    const result = useSWR(
+        [
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}`,
+            token as string,
+        ],
+        ([url, token]) => fetchWithToken<Getguild>(url, token),
     );
     return result;
 }
