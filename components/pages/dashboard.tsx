@@ -14,7 +14,8 @@ import {
 import { ChevronDown, House, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { getCookie, deleteCookie } from "cookies-next";
-import { useUser } from "@/lib/user";
+import { useUser } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 interface Nav {
     name: string;
@@ -28,17 +29,21 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
+    let router = useRouter();
     let token = getCookie("token");
+
     if (!token) {
-        window.location.href = process.env
-            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
+        router.push(
+            process.env.NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string,
+        );
     }
 
     let { data, error, isLoading } = useUser(token as string);
 
     if (error) {
-        window.location.href = process.env
-            .NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string;
+        router.push(
+            process.env.NEXT_PUBLIC_DISCORD_DASHBOARD_OAUTH_URL as string,
+        );
         return <div>failed to load</div>;
     }
     if (isLoading) return <div>loading...</div>;
@@ -86,7 +91,7 @@ export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
                     </Button>
                     {navs.length !== 0 && <div className="border-b" />}
                     {navs.map((nav, index) => (
-                        <Button asChild variant="ghost" size="lg">
+                        <Button asChild variant="ghost" size="lg" key={index}>
                             <Link
                                 href={nav.href}
                                 className="m-2 mb-8 justify-start font-bold"

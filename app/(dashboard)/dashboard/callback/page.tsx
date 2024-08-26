@@ -1,8 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    let router = useRouter();
     useEffect(() => {
         let code = new URLSearchParams(window.location.search).get("code");
         if (code) {
@@ -22,7 +24,7 @@ export default function Page() {
                 })
                 .then((data) => {
                     setCookie("token", data.token);
-                    window.location.href = "/dashboard";
+                    router.push("/dashboard");
                 });
         }
     });

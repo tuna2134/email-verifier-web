@@ -14,6 +14,16 @@ export interface Guild {
     owner: boolean;
 }
 
+export interface Role {
+    id: string;
+    name: string;
+}
+
+export interface Channel {
+    id: string;
+    name: string;
+}
+
 async function fetchWithToken<T>(url: string, token: string): Promise<T> {
     let response = await fetch(url, {
         headers: {
@@ -21,7 +31,6 @@ async function fetchWithToken<T>(url: string, token: string): Promise<T> {
         },
     });
     const user: T = await response.json();
-    console.log(user);
     return user;
 }
 
@@ -43,6 +52,28 @@ export function useUserGuilds(token: string) {
             token as string,
         ],
         ([url, token]) => fetchWithToken<Guild[]>(url, token),
+    );
+    return result;
+}
+
+export function useGuildRoles(token: string, guildId: string) {
+    const result = useSWR(
+        [
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}/roles`,
+            token as string,
+        ],
+        ([url, token]) => fetchWithToken<Role[]>(url, token),
+    );
+    return result;
+}
+
+export function useGuildChannels(token: string, guildId: string) {
+    const result = useSWR(
+        [
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}/channels`,
+            token as string,
+        ],
+        ([url, token]) => fetchWithToken<Channel[]>(url, token),
     );
     return result;
 }

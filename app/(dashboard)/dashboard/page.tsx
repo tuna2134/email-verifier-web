@@ -1,6 +1,6 @@
 "use client";
 import { DashboardLayout } from "@/components/pages/dashboard";
-import { useUserGuilds } from "@/lib/user";
+import { useUserGuilds } from "@/lib/api";
 import { getCookie } from "cookies-next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";

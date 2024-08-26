@@ -19,20 +19,79 @@ import {
     SelectValue,
     SelectItem,
 } from "@/components/ui/select";
-import { DashboardLayout } from "@/components/pages/dashboard";
+import { useGuildChannels, useGuildRoles } from "@/lib/api";
+import { getCookie } from "cookies-next";
+import { Suspense } from "react";
 
 const formSchema = z.object({
     email_pattern: z.string(),
     role: z.string(),
+    channelId: z.string(),
 });
 
-export default function Page() {
+function SelectRoleContent({
+    token,
+    guildId,
+}: {
+    token: string;
+    guildId: string;
+}) {
+    let { data } = useGuildRoles(token as string, guildId);
+    return (
+        <SelectContent>
+            {data?.map((role, index) => (
+                <SelectItem key={index} value={role.id}>
+                    {role.name}
+                </SelectItem>
+            ))}
+        </SelectContent>
+    );
+}
+
+function SelectChannelContent({
+    token,
+    guildId,
+}: {
+    token: string;
+    guildId: string;
+}) {
+    let { data } = useGuildChannels(token, guildId);
+    console.log(data);
+    return (
+        <SelectContent>
+            {data?.map((channel, index) => (
+                <SelectItem key={index} value={channel.id}>
+                    {channel.name}
+                </SelectItem>
+            ))}
+        </SelectContent>
+    );
+}
+
+export default function Page({ params }: { params: { guildId: string } }) {
+    let token = getCookie("token") as string;
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         console.log(data);
+        await fetch(
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${params.guildId}/general_settings`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email_pattern: data.email_pattern,
+                    role_id: data.role,
+                    channel_id: data.channelId,
+                }),
+            },
+        );
     }
 
     return (
@@ -72,11 +131,32 @@ export default function Page() {
                                             <SelectValue placeholder="ロール"></SelectValue>
                                         </SelectTrigger>
                                     </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="test">
-                                            test
-                                        </SelectItem>
-                                    </SelectContent>
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <SelectRoleContent
+                                            token={token as string}
+                                            guildId={params.guildId}
+                                        />
+                                    </Suspense>
+                                </Select>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="channelId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>認証パネルの送信先</FormLabel>
+                                <Select onValueChange={field.onChange}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="チャンネル"></SelectValue>
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectChannelContent
+                                        token={token}
+                                        guildId={params.guildId}
+                                    />
                                 </Select>
                             </FormItem>
                         )}
