@@ -1,5 +1,10 @@
 import useSWR from "swr";
 
+class FetchError extends Error {
+    info?: string;
+    status?: number;
+}
+
 export interface User {
     id: string;
     username: string;
@@ -31,7 +36,7 @@ async function fetchWithToken<T>(url: string, token: string): Promise<T> {
         },
     });
     if (!response.ok) {
-        let error = new Error(response.status.toString());
+        let error = new FetchError(response.status.toString());
         error.info = await response.json();
         error.status = response.status;
         throw error;
