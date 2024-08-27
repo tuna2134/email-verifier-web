@@ -17,6 +17,7 @@ export interface Guild {
     name: string;
     icon: string;
     owner: boolean;
+    permissions: string;
 }
 
 export interface Role {
