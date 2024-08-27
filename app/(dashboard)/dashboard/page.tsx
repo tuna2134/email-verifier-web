@@ -17,7 +17,7 @@ function GuildList({ token }: { token: string }) {
         <Link href={`/dashboard/${guild.id}`}>
             <Avatar key={index} className="h-full w-full">
                 <AvatarImage
-                    src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`}
+                    src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=1024`}
                 />
                 <AvatarFallback>{guild.name}</AvatarFallback>
             </Avatar>
