@@ -55,7 +55,6 @@ function SelectChannelContent({
     guildId: string;
 }) {
     let { data } = useGuildChannels(token, guildId);
-    console.log(data);
     return (
         <SelectContent>
             {data?.map((channel, index) => (
