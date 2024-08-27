@@ -19,16 +19,14 @@ import {
     SelectValue,
     SelectItem,
 } from "@/components/ui/select";
-import { useGuildChannels, useGuildRoles } from "@/lib/api";
+import {
+    useGuildChannels,
+    useGuildGeneralSettings,
+    useGuildRoles,
+} from "@/lib/api";
 import { getCookie } from "cookies-next";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { useToast } from "@/components/ui/use-toast";
-
-const formSchema = z.object({
-    email_pattern: z.string(),
-    role: z.string(),
-    channelId: z.string(),
-});
 
 function SelectRoleContent({
     token,
@@ -73,9 +71,32 @@ export default function Page({ params }: { params: { guildId: string } }) {
     let token = getCookie("token") as string;
     const { toast } = useToast();
 
+    const formSchema = z.object({
+        email_pattern: z.string(),
+        role: z.string(),
+        channelId: z.string(),
+    });
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            email_pattern: "",
+            role: "",
+            channelId: "",
+        },
     });
+
+    const { data, isLoading } = useGuildGeneralSettings(token, params.guildId);
+
+    React.useEffect(() => {
+        if (data && !isLoading) {
+            form.reset({
+                email_pattern: data.email_pattern,
+                role: data.role_id,
+                channelId: data.channel_id,
+            });
+        }
+    }, [data, isLoading]);
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         await fetch(
@@ -130,7 +151,10 @@ export default function Page({ params }: { params: { guildId: string } }) {
                                 <FormLabel>
                                     認証成功した際に渡すロール
                                 </FormLabel>
-                                <Select onValueChange={field.onChange}>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="ロール"></SelectValue>
@@ -152,7 +176,10 @@ export default function Page({ params }: { params: { guildId: string } }) {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>認証パネルの送信先</FormLabel>
-                                <Select onValueChange={field.onChange}>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="チャンネル"></SelectValue>

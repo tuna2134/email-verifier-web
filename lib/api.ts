@@ -29,6 +29,12 @@ export interface Channel {
     name: string;
 }
 
+export interface GeneralSettings {
+    email_pattern: string;
+    role_id: string;
+    channel_id: string;
+}
+
 async function fetchWithToken<T>(url: string, token: string): Promise<T> {
     let response = await fetch(url, {
         headers: {
@@ -100,6 +106,17 @@ export function useGuild(token: string, guildId: string) {
             token as string,
         ],
         ([url, token]) => fetchWithToken<Getguild>(url, token),
+    );
+    return result;
+}
+
+export function useGuildGeneralSettings(token: string, guildId: string) {
+    const result = useSWR(
+        [
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}/general_settings`,
+            token as string,
+        ],
+        ([url, token]) => fetchWithToken<any>(url, token),
     );
     return result;
 }
