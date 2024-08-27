@@ -13,7 +13,9 @@ function GuildList({ token }: { token: string }) {
 
     console.log(data);
 
-    let guilds = data?.filter((guild) => guild.permissions === "114349209288703");
+    let guilds = data?.filter(
+        (guild) => guild.permissions === "114349209288703",
+    );
 
     return guilds?.map((guild, index) => (
         <Link href={`/dashboard/${guild.id}`}>
