@@ -23,7 +23,9 @@ export default function Page() {
                     return res.json();
                 })
                 .then((data) => {
-                    setCookie("token", data.token);
+                    setCookie("token", data.token, {
+                        maxAge: 60 * 60 * 3,
+                    });
                     router.push("/dashboard");
                 });
         }
