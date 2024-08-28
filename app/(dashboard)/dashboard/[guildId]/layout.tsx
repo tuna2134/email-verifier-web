@@ -54,7 +54,7 @@ export default function RootLayout({
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>{data?.Ok.name}</BreadcrumbPage>
+                        <BreadcrumbPage>{data?.name}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>

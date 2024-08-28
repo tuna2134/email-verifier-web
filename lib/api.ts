@@ -96,17 +96,13 @@ export function useGuildChannels(token: string, guildId: string) {
     return result;
 }
 
-export interface Getguild {
-    Ok: Guild;
-}
-
 export function useGuild(token: string, guildId: string) {
     const result = useSWR(
         [
             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}`,
             token as string,
         ],
-        ([url, token]) => fetchWithToken<Getguild>(url, token),
+        ([url, token]) => fetchWithToken<Guild>(url, token),
     );
     return result;
 }
