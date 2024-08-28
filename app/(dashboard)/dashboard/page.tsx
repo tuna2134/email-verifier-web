@@ -4,6 +4,14 @@ import { useUserGuilds } from "@/lib/api";
 import { getCookie } from "cookies-next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
@@ -40,7 +48,14 @@ export default function Page() {
 
     return (
         <DashboardLayout navs={[]}>
-            <h1 className="mb-8 text-2xl font-semibold">Dashboard</h1>
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+            <h1 className="mt-4 mb-8 text-2xl font-semibold">Dashboard</h1>
             <div className="grid grid-cols-4 gap-6">
                 <Suspense fallback={<Skeleton className="h-32 w-32" />}>
                     <GuildList token={token as string} />
