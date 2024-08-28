@@ -55,7 +55,7 @@ export default function Page() {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="mt-4 mb-8 text-2xl font-semibold">Dashboard</h1>
+            <h1 className="mb-8 mt-4 text-2xl font-semibold">Dashboard</h1>
             <div className="grid grid-cols-4 gap-6">
                 <Suspense fallback={<Skeleton className="h-32 w-32" />}>
                     <GuildList token={token as string} />

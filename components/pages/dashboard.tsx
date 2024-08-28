@@ -178,7 +178,11 @@ export function DashboardLayout({ children, navs }: DashboardLayoutProps) {
 
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    const Component = isDesktop ? DesktopDashboardLayout : MobileDashboardLayout;
+    const Component = isDesktop
+        ? DesktopDashboardLayout
+        : MobileDashboardLayout;
 
-    return <Component children={children} navs={navs} token={token as string} />;
+    return (
+        <Component children={children} navs={navs} token={token as string} />
+    );
 }
