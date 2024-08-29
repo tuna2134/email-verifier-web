@@ -10,18 +10,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useGuild } from "@/lib/api";
 import { getCookie } from "cookies-next";
-import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-function getNavs(guildId: string) {
-    return [
-        {
-            name: "基本的な設定",
-            href: `/dashboard/${guildId}`,
-            icon: Settings,
-        },
-    ];
-}
+import { getNavs } from "./navs";
 
 export default function RootLayout({
     children,

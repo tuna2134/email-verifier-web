@@ -96,7 +96,7 @@ function DesktopDashboardLayout({
                         <Button asChild variant="ghost" size="lg" key={index}>
                             <Link
                                 href={nav.href}
-                                className="m-2 mb-8 justify-start font-bold"
+                                className="m-2 justify-start font-bold"
                             >
                                 <nav.icon className="mr-4" />
                                 {nav.name}

@@ -36,6 +36,12 @@ export interface GeneralSettings {
     channel_id: string;
 }
 
+export interface GuildMail {
+    mail: string;
+    id: number;
+    guild_id: string;
+}
+
 async function fetchWithToken<T>(url: string, token: string): Promise<T> {
     let response = await fetch(url, {
         headers: {
@@ -114,6 +120,17 @@ export function useGuildGeneralSettings(token: string, guildId: string) {
             token as string,
         ],
         ([url, token]) => fetchWithToken<any>(url, token),
+    );
+    return result;
+}
+
+export function useGuildMails(token: string, guildId: string) {
+    const result = useSWR(
+        [
+            `${process.env.NEXT_PUBLIC_API_ENDPOINT}/dashboard/guilds/${guildId}/mails`,
+            token as string,
+        ],
+        ([url, token]) => fetchWithToken<GuildMail[]>(url, token),
     );
     return result;
 }
