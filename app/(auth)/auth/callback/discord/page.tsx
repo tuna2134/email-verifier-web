@@ -9,6 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
 
 interface User {
     username: string;
@@ -41,6 +42,12 @@ function Content() {
             .then((data) => {
                 if (data.status === 200) {
                     setUser(data.user);
+                } else {
+                    toast({
+                        title: "エラー",
+                        description: data.message,
+                        variant: "destructive",
+                    })
                 }
             });
     }, [setUser, state, code]);
