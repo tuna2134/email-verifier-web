@@ -47,7 +47,7 @@ function Content() {
                         title: "エラー",
                         description: data.message,
                         variant: "destructive",
-                    })
+                    });
                 }
             });
     }, [setUser, state, code]);
