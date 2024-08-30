@@ -3,6 +3,7 @@
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -27,6 +28,7 @@ import {
 import { getCookie } from "cookies-next";
 import React, { Suspense } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 function SelectRoleContent({
     token,
@@ -74,6 +76,7 @@ export default function Page({ params }: { params: { guildId: string } }) {
         email_pattern: z.string(),
         role: z.string(),
         channelId: z.string(),
+        enable_check_mail: z.boolean(),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -82,6 +85,7 @@ export default function Page({ params }: { params: { guildId: string } }) {
             email_pattern: "",
             role: "",
             channelId: "",
+            enable_check_mail: false,
         },
     });
 
@@ -93,6 +97,7 @@ export default function Page({ params }: { params: { guildId: string } }) {
                 email_pattern: data.email_pattern,
                 role: data.role_id,
                 channelId: data.channel_id,
+                enable_check_mail: data.enable_check_mail,
             });
         }
     }, [data, isLoading]);
@@ -110,6 +115,7 @@ export default function Page({ params }: { params: { guildId: string } }) {
                     email_pattern: data.email_pattern,
                     role_id: data.role,
                     channel_id: data.channelId,
+                    enable_check_mail: data.enable_check_mail,
                 }),
             },
         );
@@ -166,6 +172,28 @@ export default function Page({ params }: { params: { guildId: string } }) {
                                         />
                                     </Suspense>
                                 </Select>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="enable_check_mail"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center justify-between rounded-lg border p-4">
+                                <div className="space-y-0.5">
+                                    <FormLabel>
+                                        メールアドレスのチェックを有効にする
+                                    </FormLabel>
+                                    <FormDescription>
+                                        認証時にメアドがリストにあるか確認します。
+                                    </FormDescription>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
                             </FormItem>
                         )}
                     />
