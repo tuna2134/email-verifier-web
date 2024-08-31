@@ -26,13 +26,16 @@ function GuildList({ token }: { token: string }) {
     );
 
     return guilds?.map((guild, index) => (
-        <Link href={`/dashboard/${guild.id}`}>
-            <Avatar key={index} className="h-full w-full">
-                <AvatarImage
-                    src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=1024`}
-                />
-                <AvatarFallback>{guild.name}</AvatarFallback>
-            </Avatar>
+        <Link href={`/dashboard/${guild.id}`} className="rounded-md border p-4">
+            <div>
+                <Avatar key={index} className="h-auto w-auto">
+                    <AvatarImage
+                        src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=1024`}
+                    />
+                    <AvatarFallback>{guild.name}</AvatarFallback>
+                </Avatar>
+                <p className="mt-2 text-center">{guild.name}</p>
+            </div>
         </Link>
     ));
 }

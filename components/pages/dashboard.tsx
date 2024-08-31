@@ -107,7 +107,7 @@ function DesktopDashboardLayout({
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={80} className="bg-slate-400/10">
-                <main className="mx-auto mt-8 max-w-4xl px-8">{children}</main>
+                <main className="m-8 mx-auto max-w-4xl">{children}</main>
             </ResizablePanel>
         </ResizablePanelGroup>
     );
