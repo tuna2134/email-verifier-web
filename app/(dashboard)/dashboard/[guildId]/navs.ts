@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings } from "lucide-react";
+import { Mail, Settings } from "lucide-react";
 
 export function getNavs(guildId: string) {
     return [
@@ -12,7 +12,7 @@ export function getNavs(guildId: string) {
         {
             name: "メールアドレスの追加",
             href: `/dashboard/${guildId}/mail`,
-            icon: Settings,
+            icon: Mail,
         },
     ];
 }
